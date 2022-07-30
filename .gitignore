@@ -1,0 +1,11 @@
+/.idea
+
+*.o
+*.o.*
+*.so
+*.ko
+*.mod
+*.mod.*
+.*.cmd
+*.order
+*.symvers
