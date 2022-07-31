@@ -37,8 +37,8 @@ as well as a xtables extensions at
 For example, you have the following 2 nodes act as server and client.
 
 + Server
-  + Address: fc00:2070::1/128
-  + Prefix: fc00:3001::/64
+  + Address: fc00:2070::2/128
+  + Prefix: fc00:3002::/64
 
 + Client
   + Address: fc00:2070::1/128
