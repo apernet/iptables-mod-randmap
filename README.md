@@ -32,7 +32,33 @@ as well as a xtables extensions at
 `$(pkg-config xtables --variable xtlibdir)/libxt_RANDMAP.so`
 
 
-## Example & Intended Usage
+## Usage
+
+RANDMAP only works in `mangle` table.
+
+```
+# iptables -j RANDMAP --help
+...
+RANDMAP target options:
+  --src-pfx prefix/length
+                                Prefix for random source address.
+
+  --sport port:port
+                                Port range for random source port.
+
+  --dst-pfx prefix/length
+                                Prefix for random destination address.
+
+  --dport port:port
+                                Port range for random destination port.
+
+```
+
+All above options can be omitted to leave corresponding attributes unchanged in
+IP packets.
+
+
+## Example & Intended Use
 
 For example, you have the following 2 nodes act as server and client.
 
