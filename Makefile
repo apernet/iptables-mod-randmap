@@ -55,9 +55,11 @@ install-all: install-kmod install-usrmod
 install: install-kmod
 install-kmod: kmod
 	$(MAKE) -C $(KERNEL_DIR) M=$(PWD) modules_install
+	depmod -a
 
 install-usrmod:
 	$(MAKE) -C $(PWD)/usrmod install
+	depmod -a
 
 uninstall-usrmod:
 	$(MAKE) -C $(PWD)/usrmod uninstall
