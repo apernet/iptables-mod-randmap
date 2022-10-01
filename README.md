@@ -22,6 +22,16 @@ conntrack-based firewall.
 
 ## Build & Install
 
+On Debian 11:
+```
+# Update to latest kernel
+apt update && apt -y upgrade
+reboot
+
+# Install kernel header and other build tools
+apt -y install linux-headers-$(uname -r) libxtables-dev git build-essential pkg-config
+```
+
 ```
 make install-all
 ```
