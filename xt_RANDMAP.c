@@ -72,6 +72,7 @@ randmap_tg4(struct sk_buff *skb, const struct xt_action_param *par)
 	const struct randmap_info *info;
 	struct randmap_mangle_context ctx;
 	unsigned int i;
+	__u16 randomized_port;
 
 	info = par->targinfo;
 
@@ -91,9 +92,9 @@ randmap_tg4(struct sk_buff *skb, const struct xt_action_param *par)
 			ctx.mangled[i].addr.ip |= info->ranges[i].net.ip & info->ranges[i].mask.ip;
 		}
 		if ((ctx.mangle_flags[i] & RANDMAP_MANGLE_PROTO) != 0) {
-			ctx.mangled[i].proto.all = info->ranges[i].min_proto;
-			ctx.mangled[i].proto.all += get_random_int() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
-			ctx.mangled[i].proto.all = htons(ctx.mangled[i].proto.all);
+			randomized_port = info->ranges[i].min_proto;
+			randomized_port += get_random_int() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
+			ctx.mangled[i].proto.all = htons(randomized_port);
 		}
 	}
 
