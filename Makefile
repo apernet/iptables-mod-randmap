@@ -59,7 +59,6 @@ install-kmod: kmod
 
 install-usrmod:
 	$(MAKE) -C $(PWD)/usrmod install
-	depmod -a
 
 uninstall-usrmod:
 	$(MAKE) -C $(PWD)/usrmod uninstall
