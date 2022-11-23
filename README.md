@@ -4,20 +4,17 @@ iptables-mod-randmap
 > **Warning**
 >
 > This is still an experimental & in-development project.
-> It is not fully tested and seems to cause a kernel panic.
+> It is not fully tested and may cause kernel panic.
 
-An `iptables-extensions(8)` that added a `RANDMAP` target for stateless
+An `iptables-extensions(8)` that adds a `RANDMAP` target for stateless
 addresses / port randomization.
 
-Just provide a prefix and/or a port range, RANDMAP will randomly choose an
-address and/or a port for every IP packet, set them to the IP packet, and fix
-the checksum, that's all.
+Just provide a prefix and/or a port range, and RANDMAP will randomly choose a new
+address and/or a new port number for every IP packet.
 
-In fact, you can also set a /128 as prefix and 80:80 as port range, which let
-you set those attributes in the IP packet freely.
+You can also set a /128 as prefix and a single port number as the port range to convert randomized IP headers back.
 
-RANDMAP is stateless, it is not designed to be a NAT or pass any
-conntrack-based firewall.
+RANDMAP is stateless. It is not designed to traverse NAT or stateful firewall.
 
 
 ## Build & Install
@@ -44,7 +41,7 @@ as well as a xtables extensions at
 
 ## Usage
 
-RANDMAP only works in `mangle` table.
+RANDMAP only works in the `mangle` table.
 
 ```
 # iptables -j RANDMAP --help
@@ -64,38 +61,38 @@ RANDMAP target options:
 
 ```
 
-All above options can be omitted to leave corresponding attributes unchanged in
+All options can be omitted to leave corresponding attributes unchanged in
 IP packets.
 
 
 ## Example & Intended Use
 
-For example, you have the following 2 nodes act as server and client.
+For example, if you have the following 2 hosts act as server and client.
 
 + Server
   + Address: fc00:2070::2/128
-  + Prefix: fc00:3002::/64
+  + Routed Prefix: fc00:3002::/64
 
 + Client
   + Address: fc00:2070::1/128
 
-Set the following ip6tables rules on server node:
+Set the following ip6tables rules on the server:
 
 ```
 ip6tables -t mangle -A PREROUTING -d fc00:3002::/64 -j RANDMAP --dst-pfx fc00:2070::2/128 --dport 80:80
 ip6tables -t mangle -A OUTPUT -s fc00:2070::2 -p tcp --sport 80 -j RANDMAP --src-pfx fc00:3002::/64 --sport 0:65535
 ```
 
-And set the following ip6tables rules on client node:
+And set the following ip6tables rules on the client:
 
 ```
 ip6tables -t mangle -A OUTPUT -d fc00:2070::2 -p tcp --dport 80 -j RANDMAP --dst-pfx fc00:3002::/64 --dport 0:65535
 ip6tables -t mangle -A PREROUTING -s fc00:3002::/64 -j RANDMAP --src-pfx fc00:2070::2/128 --sport 80:80
 ```
 
-Assuming you have an HTTP server on the server node, listening on :80.
+Assume a HTTP server is listening port 80 on the server.
 
-On the client node, execute the following curl command:
+If we visit the HTTP server on the client:
 
 ```
 curl http://[fc00:2070::2]
