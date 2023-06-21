@@ -46,7 +46,7 @@ randmap_tg6(struct sk_buff *skb, const struct xt_action_param *par)
 		}
 		if ((ctx.mangle_flags[i] & RANDMAP_MANGLE_PROTO) != 0) {
 			randomized_port = info->ranges[i].min_proto;
-			randomized_port += get_random_int() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
+			randomized_port += get_random_u32() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
 			ctx.mangled[i].proto.all = htons(randomized_port);
 		}
 	}
@@ -93,7 +93,7 @@ randmap_tg4(struct sk_buff *skb, const struct xt_action_param *par)
 		}
 		if ((ctx.mangle_flags[i] & RANDMAP_MANGLE_PROTO) != 0) {
 			randomized_port = info->ranges[i].min_proto;
-			randomized_port += get_random_int() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
+			randomized_port += get_random_u32() % (info->ranges[i].max_proto - info->ranges[i].min_proto + 1);
 			ctx.mangled[i].proto.all = htons(randomized_port);
 		}
 	}
